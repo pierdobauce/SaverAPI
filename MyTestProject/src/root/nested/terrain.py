@@ -18,13 +18,11 @@ class Terrain(object):
     fenterrain=Constantes.nondefini
     canvas=Constantes.nondefini
     gameover=False
-    stockage=[]
     stockagestr=""
 
     def __init__(self, dimx, dimy):
         "Constructeur de la classe Terrain"
         del self.population[:]
-        del self.stockage[:]
         self.stockagestr=""
         self.dimensionx=dimx
         self.dimensiony=dimy
@@ -35,7 +33,6 @@ class Terrain(object):
         self.gameover=False
         self.stockagestr="{{'start':{{'dimensions':{{'x':{0},'y':{1}}}}},".format(dimx, dimy)
         print("stockagestr:", self.stockagestr)
-        self.stockage.append(['Dimensions', dimx, dimy])
              
     def ajouthabitant(self, ltype, posx, posy):
         "Ajout d'un habitant à une certaine position"    
@@ -129,9 +126,5 @@ class Terrain(object):
     def isgameover(self, cptmove):
         "Détermine si la partie est terminée"
         #print("gameover: ", self.gameover)
-        if (self.gameover == True):
-            # Sauver cette simulation
-            self.stockage.append(['Survie', cptmove])
-            print(self.stockage)
         return self.gameover
     

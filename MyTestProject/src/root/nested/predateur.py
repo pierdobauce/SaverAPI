@@ -16,7 +16,6 @@ class Predateur(Habitant):
         self.vitessemax=8
         self.vision=35
         self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='red')
-        self.terrain.stockage.append(["Prédateur Start", self.positionx, self.positiony ])
         self.type="Predateur"
         #self.terrain.stockagestr=self.terrain.stockagestr+",{{'catégorie':'prédateur','x':{0},'y':{1}}}".format(self.positionx, self.positiony)
         #print("stockagestr:", self.terrain.stockagestr)
@@ -58,7 +57,6 @@ class Predateur(Habitant):
             self.nextpositionx=Constantes.nondefini
             self.nextpositiony=Constantes.nondefini
             self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
-            self.terrain.stockage.append(["Prédateur Move", self.positionx, self.positiony])
 
     def aftermove(self):
         "Réalisation des actions post move"

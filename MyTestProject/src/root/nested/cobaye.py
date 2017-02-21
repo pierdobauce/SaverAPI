@@ -22,9 +22,6 @@ class Cobaye(Habitant):
         self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='blue')
         self.type="Cobaye"
         self.nivenergie=Constantes.cobayeenergiedepart
-        self.terrain.stockage.append(["Cobaye Start", self.positionx, self.positiony])
-        #self.terrain.stockagestr=self.terrain.stockagestr+"{{'catégorie':'cobaye','x':{0},'y':{1},'energie':{2}}}".format(self.positionx, self.positiony, self.nivenergie)
-        #print("stockagestr:", self.terrain.stockagestr)
 
     def computemove(self):
         "Calcul du prochain mouvement de ce cobaye"
@@ -87,7 +84,6 @@ class Cobaye(Habitant):
         "Réalisation du move déjà calculé"
         # Le tour de mouvement coute de la nourriture
         self.nivenergie=self.nivenergie-Constantes.coutenergiecobayepartour
-        self.terrain.stockage.append(["Cobaye Energie", self.nivenergie])
         # Tester si mouvement nécessaire
         if self.nextpositionx != Constantes.nondefini:
             # Effacer la flèche.
@@ -99,7 +95,6 @@ class Cobaye(Habitant):
             self.nextpositionx=Constantes.nondefini
             self.nextpositiony=Constantes.nondefini
             self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
-            self.terrain.stockage.append(["Cobaye Move", self.positionx, self.positiony])
 
     def aftermove(self):
         "Réalisation des actions post move"
@@ -130,7 +125,6 @@ class Cobaye(Habitant):
     def disparaitre(self):
         "Actions à réaliser avant de faire sortir cet habitant"
         self.terrain.canvas.delete(self.forme)
-        self.terrain.stockage.append(["Cobaye Delete", self.positionx, self.positiony ])
 
     def display(self, txtwidget):
         "Donner à chaque objet (habitant, mais pas que...) l'opportunité d'afficher quelque chose sur le controleur"

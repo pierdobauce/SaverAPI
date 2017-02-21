@@ -6,6 +6,7 @@ Created on 30 nov. 2016
 from root.nested.terrain import Terrain
 from tkinter import *
 from random import randrange
+import requests
 
 class Simulateur(object):
     "le simulateur faisant tourner le monde virtuel"
@@ -45,7 +46,6 @@ class Simulateur(object):
         
     def performmove(self):
         "Réalisation des mouvements calculés de tous les habitants du terrain"
-        self.terrain.stockage.append(["Simulation Nbmove", self.cptmove])
         self.terrain.performmove()        
         
     def aftermove(self):
@@ -63,8 +63,16 @@ class Simulateur(object):
         self.terrain.display(txtwidget)
         if (self.terrain.gameover==True):
             self.terrain.fenterrain.destroy()
-            self.terrain.stockagestr=self.terrain.stockagestr+"],'end':{{'survie':{0}}}}}".format(self.cptmove)
+            thesurvie=self.cptmove
+            if (thesurvie>999):
+                thesurvie=999
+            self.terrain.stockagestr=self.terrain.stockagestr+"],'end':{{'survie':{0}}}}}".format(thesurvie)
             print("stockagestr:", self.terrain.stockagestr)
+            #jsonaenvoyer='{"Survie":'+str(random.randrange(1,1000))+',"Trace":"longue chaine d etapes"}'
+            r=requests.post('http://127.0.0.1:5000/serverAPI', json=self.terrain.stockagestr)
+            print("status code:", r.status_code)
+            print("response:", r.text)
+
         
     def isgameover(self):
         "Détermine si la partie est terminée"

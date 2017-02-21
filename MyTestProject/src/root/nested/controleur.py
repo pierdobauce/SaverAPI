@@ -78,7 +78,7 @@ if __name__ == '__main__':
     def apitestpost():
         "Test d'un POST vers l'API server"
         for i in range(0,5):
-            jsonaenvoyer='{"Survie":'+str(random.randrange(1,1000))+',"Trace":"longue chaine d etapes"}'
+            jsonaenvoyer='{"end":{"survie":'+str(random.randrange(1,1000))+'},"tours":1}'
             r=requests.post('http://127.0.0.1:5000/serverAPI', json=jsonaenvoyer)
             print("status code:", r.status_code)
             print("response:", r.text)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         cansummary.delete("all")
         cansummarylastentrynb=0
         for i in range(1,taille+1):
-            survie=parsedjson[str(i)]["Survie"]
+            survie=parsedjson[str(i)]["end"]["survie"]
             addsummaryentry(survie)
 
     def apitestgetentry():

@@ -17,10 +17,12 @@ def api_post():
     isjson=request.is_json
     print("is_json:", isjson)
     jsonstring=request.get_json(force=True, silent=True)
+    jsonstring=jsonstring.replace("'",'"')
     print("json:", jsonstring)
     parsedjson = json.loads(jsonstring)
-    print("La survie a été de: ", parsedjson["Survie"])
-    print("La séquence: ", parsedjson["Trace"])
+    #print("La fin: ", parsedjson["end"])
+    #print("La survie a été de: ", parsedjson["end"]["survie"])
+    #print("Le début: ", parsedjson["start"])
     entryid=datetime.datetime.now()
     parsedjson["EntryId"]="Cobaye "+str(entryid)
     stockage.append(parsedjson)
@@ -41,7 +43,7 @@ def api_get():
     cpteur=1
     for obj in stockage:
         obj1=deepcopy(obj)
-        del obj1["Trace"]
+        del obj1["tours"]
         data[cpteur]=obj1
         cpteur=cpteur+1
     returnjs=json.dumps(data)
