@@ -14,7 +14,7 @@ class Simulateur(object):
     cptmove=0
     newnour=0
 
-    def __init__(self, dicoparam):
+    def __init__(self, dicoparam, visible=1):
         "Constructeur de la classe Simulateur"
         terrainlg=dicoparam['largeur']
         terrainht=dicoparam["hauteur"]
@@ -22,13 +22,9 @@ class Simulateur(object):
         nbpred=dicoparam['nb prédateurs']
         nbnour=dicoparam['nb nourritures']
         self.newnour=dicoparam['nb tours réapparition nourriture']
-        self.terrain=Terrain(terrainlg, terrainht)  # Création de l'aire de jeu
+        self.terrain=Terrain(terrainlg, terrainht, visible)  # Création de l'aire de jeu
         self.cptmove=0
         self.terrain.stockagestr=self.terrain.stockagestr+"'tours':["
-        #self.terrain.stockagestr=self.terrain.stockagestr+"'tours':[{{'tour nb':{0},".format(self.cptmove)
-        #self.terrain.stockagestr=self.terrain.stockagestr+"'population':["
-        #print("stockagestr:", self.terrain.stockagestr)
-        # Ajout des habitants
         for i in range(nbcob):
             self.terrain.ajouthabitant("Cobaye", randrange(self.terrain.dimensionx-10+5) , randrange(self.terrain.dimensiony-10+5))
         for i in range(nbpred):
@@ -36,8 +32,6 @@ class Simulateur(object):
         for i in range(nbnour):
             self.terrain.ajouthabitant("NourritureFixe", randrange(self.terrain.dimensionx-10+5) , randrange(self.terrain.dimensiony-10+5))
         self.terrain.stocker(self.cptmove, first=1)
-        #self.terrain.stockagestr=self.terrain.stockagestr+"]}"
-        #print("stockagestr:", self.terrain.stockagestr)
 
 
     def computemove(self):
@@ -62,7 +56,8 @@ class Simulateur(object):
         txtwidget.insert(END, "Compteur de mouvement: {}.\n".format(self.cptmove))
         self.terrain.display(txtwidget)
         if (self.terrain.gameover==True):
-            self.terrain.fenterrain.destroy()
+            if (self.terrain.visible==1):
+                self.terrain.fenterrain.destroy()
             thesurvie=self.cptmove
             if (thesurvie>999):
                 thesurvie=999

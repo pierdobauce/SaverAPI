@@ -11,6 +11,7 @@ from copy import deepcopy
 
 app = Flask(__name__)
 stockage=[]
+stockagelight=[]
 
 @app.route('/serverAPI', methods = ['POST'])
 def api_post():
@@ -20,15 +21,16 @@ def api_post():
     jsonstring=jsonstring.replace("'",'"')
     print("json:", jsonstring)
     parsedjson = json.loads(jsonstring)
-    #print("La fin: ", parsedjson["end"])
-    #print("La survie a été de: ", parsedjson["end"]["survie"])
-    #print("Le début: ", parsedjson["start"])
     entryid=datetime.datetime.now()
-    parsedjson["EntryId"]="Cobaye "+str(entryid)
+    parsedjson["entryid"]="cobaye "+str(entryid)
     stockage.append(parsedjson)
+    obj1=deepcopy(parsedjson)
+    del obj1["start"]
+    del obj1["tours"]
+    stockagelight.append(obj1)
     data = {
-        "Status":"OK",
-        "Entry":str(entryid)
+        "status":"OK",
+        "entry":str(entryid)
     }
    # data["Entry"]='"'+str(entryid)+'"'
     returnjs = json.dumps(data)
@@ -38,13 +40,11 @@ def api_post():
 
 @app.route('/serverAPI', methods = ['GET'])
 def api_get():
-    data = {"Status":"OK"}
-    data["Taille"]=len(stockage)
+    data = {"status":"OK"}
+    data["taille"]=len(stockage)
     cpteur=1
-    for obj in stockage:
-        obj1=deepcopy(obj)
-        del obj1["tours"]
-        data[cpteur]=obj1
+    for obj in stockagelight:
+        data[cpteur]=obj
         cpteur=cpteur+1
     returnjs=json.dumps(data)
     resp = Response(returnjs, status=200, mimetype='application/json')

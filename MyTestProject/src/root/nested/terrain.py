@@ -19,17 +19,20 @@ class Terrain(object):
     canvas=Constantes.nondefini
     gameover=False
     stockagestr=""
+    visible=1
 
-    def __init__(self, dimx, dimy):
+    def __init__(self, dimx, dimy, visible):
         "Constructeur de la classe Terrain"
         del self.population[:]
         self.stockagestr=""
         self.dimensionx=dimx
         self.dimensiony=dimy
-        self.fenterrain=Tk()
-        self.fenterrain.title("Simulation")
-        self.canvas = Canvas(self.fenterrain,bg='dark grey',height=self.dimensiony,width=self.dimensionx)
-        self.canvas.pack(side=LEFT)
+        self.visible=visible
+        if (visible==1):
+            self.fenterrain=Tk()
+            self.fenterrain.title("Simulation")
+            self.canvas = Canvas(self.fenterrain,bg='dark grey',height=self.dimensiony,width=self.dimensionx)
+            self.canvas.pack(side=LEFT)
         self.gameover=False
         self.stockagestr="{{'start':{{'dimensions':{{'x':{0},'y':{1}}}}},".format(dimx, dimy)
         print("stockagestr:", self.stockagestr)
@@ -89,7 +92,8 @@ class Terrain(object):
         for hab in self.population:
             hab.display(txtwidget)
         #print(self.stockage)
-        self.canvas.update_idletasks()
+        if (self.visible)==1:
+            self.canvas.update_idletasks()
 
     def stocker(self, cptmove, first=0):
         "Stockage dans je json"

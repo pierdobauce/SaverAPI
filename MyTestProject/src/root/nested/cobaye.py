@@ -19,7 +19,8 @@ class Cobaye(Habitant):
         super().__init__(ter, posx, posy)
         self.vitessemax=10
         self.vision=40
-        self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='blue')
+        if (ter.visible==1):
+            self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='blue')
         self.type="Cobaye"
         self.nivenergie=Constantes.cobayeenergiedepart
 
@@ -52,8 +53,9 @@ class Cobaye(Habitant):
                     self.nextpositiony=7
                 if (self.nextpositiony>self.terrain.dimensiony-7):
                     self.nextpositiony=self.terrain.dimensiony-7
-                # Affichage du vecteur
-                self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='blue')
+                if (self.terrain.visible==1):
+                    # Affichage du vecteur
+                    self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='blue')
         if (self.nextpositionx == Constantes.nondefini):
             # Si la faim tiraille, il faut chercher à manger.
             nourposx, nourposy = self.terrain.plusprocheselontype(self.positionx, self.positiony, "NourritureFixe")
@@ -75,8 +77,9 @@ class Cobaye(Habitant):
                     #print ("vecteurdep normalisé move nourriture cobaye", vecteurdepx, vecteurdepy)
                     self.nextpositionx=self.positionx+vecteurdepx
                     self.nextpositiony=self.positiony+vecteurdepy
-                    # Affichage du vecteur
-                    self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='blue')
+                    if (self.terrain.visible==1):
+                        # Affichage du vecteur
+                        self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='blue')
             #else:
                 # Se déplacer au hasard
 
@@ -86,15 +89,17 @@ class Cobaye(Habitant):
         self.nivenergie=self.nivenergie-Constantes.coutenergiecobayepartour
         # Tester si mouvement nécessaire
         if self.nextpositionx != Constantes.nondefini:
-            # Effacer la flèche.
-            self.terrain.canvas.delete(self.formemove)
-            self.formemove=Constantes.nondefini
+            if (self.terrain.visible==1):
+                # Effacer la flèche.
+                self.terrain.canvas.delete(self.formemove)
+                self.formemove=Constantes.nondefini
             # Bouger le cobaye.
             self.positionx=self.nextpositionx
             self.positiony=self.nextpositiony
             self.nextpositionx=Constantes.nondefini
             self.nextpositiony=Constantes.nondefini
-            self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
+            if (self.terrain.visible==1):
+                self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
 
     def aftermove(self):
         "Réalisation des actions post move"
@@ -124,7 +129,8 @@ class Cobaye(Habitant):
 
     def disparaitre(self):
         "Actions à réaliser avant de faire sortir cet habitant"
-        self.terrain.canvas.delete(self.forme)
+        if (self.terrain.visible==1):
+            self.terrain.canvas.delete(self.forme)
 
     def display(self, txtwidget):
         "Donner à chaque objet (habitant, mais pas que...) l'opportunité d'afficher quelque chose sur le controleur"

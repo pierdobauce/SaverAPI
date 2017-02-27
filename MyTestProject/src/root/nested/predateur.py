@@ -15,10 +15,9 @@ class Predateur(Habitant):
         super().__init__(ter, posx, posy)
         self.vitessemax=8
         self.vision=35
-        self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='red')
+        if (ter.visible==1):
+            self.forme = self.terrain.canvas.create_oval(self.positionx-5 , self.positiony-5, self.positionx+5, self.positiony+5, width=2, fill='red')
         self.type="Predateur"
-        #self.terrain.stockagestr=self.terrain.stockagestr+",{{'catégorie':'prédateur','x':{0},'y':{1}}}".format(self.positionx, self.positiony)
-        #print("stockagestr:", self.terrain.stockagestr)
 
     def computemove(self):
         "Calcul du prochain mouvement de ce prédateur"
@@ -41,22 +40,25 @@ class Predateur(Habitant):
                 #print ("vecteurdep normalisé move prédateur", vecteurdepx, vecteurdepy)
                 self.nextpositionx=self.positionx+vecteurdepx
                 self.nextpositiony=self.positiony+vecteurdepy
-                # Affichage du vecteur
-                self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='red')
+                if (self.terrain.visible==1):
+                    # Affichage du vecteur
+                    self.formemove=self.terrain.canvas.create_line(self.positionx, self.positiony, self.nextpositionx, self.nextpositiony, arrow="last", width=2, fill='red')
 
     def performmove(self):
         "Réalisation du move déjà calculé"
         # Tester si mouvement nécessaire
         if self.nextpositionx != Constantes.nondefini:
-            # Effacer la flèche.
-            self.terrain.canvas.delete(self.formemove)
-            self.formemove=Constantes.nondefini
+            if (self.terrain.visible==1):
+                # Effacer la flèche.
+                self.terrain.canvas.delete(self.formemove)
+                self.formemove=Constantes.nondefini
             # Bouger le predateur.
             self.positionx=self.nextpositionx
             self.positiony=self.nextpositiony
             self.nextpositionx=Constantes.nondefini
             self.nextpositiony=Constantes.nondefini
-            self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
+            if (self.terrain.visible==1):
+                self.terrain.canvas.coords(self.forme, self.positionx-5, self.positiony-5, self.positionx+5, self.positiony+5)
 
     def aftermove(self):
         "Réalisation des actions post move"
