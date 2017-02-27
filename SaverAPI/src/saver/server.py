@@ -22,7 +22,7 @@ def api_post():
     print("json:", jsonstring)
     parsedjson = json.loads(jsonstring)
     entryid=datetime.datetime.now()
-    parsedjson["entryid"]="cobaye "+str(entryid)
+    parsedjson["entryid"]="cobaye_"+entryid.strftime("%Y-%m-%d_%H:%M:%S_%f")
     stockage.append(parsedjson)
     obj1=deepcopy(parsedjson)
     del obj1["start"]

@@ -135,6 +135,11 @@ if __name__ == '__main__':
 
     def cansummarystartwindow():
         print("Start window for: ", entryidtostart)
+        target='http://127.0.0.1:5000/serverAPI/{0}'.format(entryidtostart)
+        r=requests.get(target)
+        print("status code:", r.status_code)
+        print("response:", r.text)
+
    
     fenctrl=Tk()
     fenctrl.title("Controleur")
