@@ -15,6 +15,7 @@ stockagelight=[]
 
 @app.route('/serverAPI', methods = ['POST'])
 def api_post():
+    "Ecriture d'une entrée de sauvegarde"
     isjson=request.is_json
     print("is_json:", isjson)
     jsonstring=request.get_json(force=True, silent=True)
@@ -32,7 +33,6 @@ def api_post():
         "status":"OK",
         "entry":str(entryid)
     }
-   # data["Entry"]='"'+str(entryid)+'"'
     returnjs = json.dumps(data)
 
     resp = Response(returnjs, status=200, mimetype='application/json')
@@ -40,6 +40,7 @@ def api_post():
 
 @app.route('/serverAPI', methods = ['GET'])
 def api_get():
+    "Lecture d'un résumé de toutes les entrée de sauvegarde"
     data = {"status":"OK"}
     data["taille"]=len(stockage)
     cpteur=1
@@ -53,7 +54,22 @@ def api_get():
 
 @app.route('/serverAPI/<entryid>', methods = ['GET'])
 def api_getentry(entryid):
-    return 'You are reading ' + entryid
+    "Lecture d'une entrée sépcifique de sauvegarde"
+    returnstr="vide"
+    for majorkey in stockage:
+        print ("Clé de niveau 0: ", majorkey['entryid'])
+        if majorkey['entryid']==entryid:
+            returnstr=majorkey
+            break
+
+    data = {
+        "status":"OK",
+        "entry": returnstr
+    }
+    returnjs = json.dumps(data)
+
+    resp = Response(returnjs, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/')
 def api_root():

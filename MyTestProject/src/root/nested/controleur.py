@@ -6,6 +6,7 @@ Created on 4 déc. 2016
 from tkinter import *
 from root.nested.simulateur import Simulateur
 from root.nested.constantes import Constantes
+from root.nested.replay import Replay
 import time
 import requests
 import random
@@ -134,12 +135,9 @@ if __name__ == '__main__':
         print ("Clic release droit en ", event.x, event.y)
 
     def cansummarystartwindow():
+        global fenreplay
         print("Start window for: ", entryidtostart)
-        target='http://127.0.0.1:5000/serverAPI/{0}'.format(entryidtostart)
-        r=requests.get(target)
-        print("status code:", r.status_code)
-        print("response:", r.text)
-
+        fenreplay=Replay(entryidtostart)
    
     fenctrl=Tk()
     fenctrl.title("Controleur")
@@ -203,5 +201,6 @@ if __name__ == '__main__':
     
     stockage={}
     entryidtostart=""
+    fenreplay=Constantes.nondefini
     
     fenctrl.mainloop()
