@@ -46,6 +46,7 @@ class Replay(object):
         self.progress = ttk.Progressbar(self.fenreplay, orient="horizontal", length=self.dimensionx-100, mode="determinate")
         self.progress["value"] = 0
         self.progress["maximum"] = self.stockage["entry"]["end"]["survie"]
+        self.progress.bind("<Button-1>", self.clicgaucheprogressbar)
         self.progresstext="0/{0}".format(self.progress["maximum"])
         self.progresslabel=Label(self.fenreplay, text= self.progresstext)
         self.progresslabel.grid(row=1, column=0, sticky=E)
@@ -56,6 +57,7 @@ class Replay(object):
         
         self.canvas = Canvas(self.fenreplay,bg='dark grey',height=self.dimensiony,width=self.dimensionx)
         self.canvas.grid(row=2, columnspan=4, sticky=S)
+        self.afficher(0)
         
     def clickmoins(self):
         "Clic sur le bouton moins-un-tick"
@@ -64,7 +66,7 @@ class Replay(object):
             self.progresstext="{0}/{1}".format(self.timetic,self.progress["maximum"])
             self.progresslabel["text"]=self.progresstext
         self.progress["value"]=self.timetic
-        self.afficher(5)
+        self.afficher(self.timetic)
         
     def clickplus(self):
         "Clic sur le bouton plus-un-tick"
@@ -73,14 +75,32 @@ class Replay(object):
             self.progresstext="{0}/{1}".format(self.timetic,self.progress["maximum"])
             self.progresslabel["text"]=self.progresstext
         self.progress["value"]=self.timetic
-        self.afficher(8)
+        self.afficher(self.timetic)
         
+    def clicgaucheprogressbar(self, event):
+        print ("Clic gauche progressbar en ", event.x, event.y, self.progress["length"])
+        self.timetic=int((event.x/(self.progress["length"]-1))*self.progress["maximum"])
+        self.progresstext="{0}/{1}".format(self.timetic,self.progress["maximum"])
+        self.progresslabel["text"]=self.progresstext
+        self.progress["value"]=self.timetic
+        self.afficher(self.timetic)
         
     def afficher(self, tic):
         "Effacer le canvas et construire la configuration du tick"
         self.canvas.delete("all")
-        posx=100
-        posy=100
-        forme = self.canvas.create_oval(posx-5 , posy-5, posx+5, posy+5, width=2, fill='red')
-        print("replay:", self.stockage["entry"]["tours"][tic]["population"])
-        
+        #print("replay all:", self.stockage["entry"]["tours"][tic]["population"])
+        liste=self.stockage["entry"]["tours"][tic]["population"]
+        for elt in liste:
+            #print("Replay elt: {0}, et catégorie: {1} et x: {2}".format(elt, elt["catégorie"], elt["x"]))
+            if (elt["catégorie"]=="cobaye"):
+                x=elt["x"]
+                y=elt["y"]
+                forme = self.canvas.create_oval(x-5, y-5, x+5, y+5, width=2, fill='blue')
+            elif (elt["catégorie"]=="prédateur"):
+                x=elt["x"]
+                y=elt["y"]
+                forme = self.canvas.create_oval(x-5, y-5, x+5, y+5, width=2, fill='red')
+            elif (elt["catégorie"]=="nourriturefixe"):
+                x=elt["x"]
+                y=elt["y"]
+                forme = self.canvas.create_rectangle(x-5, y-5, x+5, y+5, width=2, fill='green')

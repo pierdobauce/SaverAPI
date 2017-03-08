@@ -93,8 +93,8 @@ if __name__ == '__main__':
         "Test d'un GET vers l'API server"
         global cansummarylastentrynb, stockage
         r=requests.get('http://127.0.0.1:5000/serverAPI')
-        print("status code:", r.status_code)
-        print("response:", r.text)
+        #print("status code:", r.status_code)
+        #print("response:", r.text)
         parsedjson = json.loads(r.text)
         stockage=deepcopy(parsedjson)
         taille=parsedjson["taille"]
