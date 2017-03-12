@@ -21,9 +21,11 @@ class Replay(object):
     boutonplus=Constantes.nondefini
     progress=Constantes.nondefini
     progresslabel=Constantes.nondefini
+    energielabel=Constantes.nondefini
     stockage={}
     timetic=0
     progresstext="0/999"
+    energietext="100"
 
     def __init__(self, entryid):
         "Constructeur de la classe permettant de rejouer une partie spécifique"
@@ -57,6 +59,15 @@ class Replay(object):
         
         self.canvas = Canvas(self.fenreplay,bg='dark grey',height=self.dimensiony,width=self.dimensionx)
         self.canvas.grid(row=2, columnspan=4, sticky=S)
+        
+        self.energie = ttk.Progressbar(self.fenreplay, orient="vertical", length=self.dimensiony, mode="determinate")
+        self.energie["value"] = 0
+        self.energie["maximum"] = Constantes.cobayeenergiedepart
+        self.energie.grid(row=2, column=5, sticky=S)
+        self.energietext="{0}".format(self.energie["maximum"])
+        self.energielabel=Label(self.fenreplay, text= self.energietext)
+        self.energielabel.grid(row=1, column=5, sticky=E)
+
         self.afficher(0)
         
     def clickmoins(self):
@@ -95,6 +106,12 @@ class Replay(object):
             if (elt["catégorie"]=="cobaye"):
                 x=elt["x"]
                 y=elt["y"]
+                energie=elt["energie"]
+                if (energie > self.energie["maximum"]):
+                    self.energie["maximum"]=energie
+                self.energie["value"]=energie
+                self.energietext="{0}".format(energie)
+                self.energielabel["text"]=self.energietext
                 forme = self.canvas.create_oval(x-5, y-5, x+5, y+5, width=2, fill='blue')
             elif (elt["catégorie"]=="prédateur"):
                 x=elt["x"]
